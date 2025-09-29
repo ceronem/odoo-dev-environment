@@ -11,6 +11,7 @@ NO_BROWSER=false
 PG_TIMEOUT=60
 DEBUG_MODE=false
 DEBUG_WAIT=false
+SKIP_MODULES=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -20,6 +21,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-deps)
             SKIP_DEPS=true
+            shift
+            ;;
+        --skip-modules)
+            SKIP_MODULES=true
             shift
             ;;
         --demo)
@@ -56,6 +61,7 @@ while [[ $# -gt 0 ]]; do
             echo "Options:"
             echo "  -v, --verbose     Verbose output"
             echo "  --skip-deps       Skip dependency installation"
+            echo "  --skip-modules    Skip module management (clone/update)"
             echo "  --demo           Enable demo mode"
             echo "  --fresh-db       Initialize fresh database (--init=all)"
             echo "  --force          Skip confirmation prompts"
@@ -101,6 +107,96 @@ DB_PORT="${DB_PORT:-5432}"
 # --- Funzioni di utilità ---
 function command_exists() {
     command -v "$1" >/dev/null 2>&1
+}
+
+# --- Gestione moduli ---
+function manage_modules() {
+    local modules_file="modules.json"
+
+    if [ ! -f "$modules_file" ]; then
+        log_verbose "File modules.json non trovato, saltando gestione moduli"
+        return 0
+    fi
+
+    log "Gestione moduli personalizzati..."
+
+    # Assicurati che la directory modules esista
+    mkdir -p modules
+
+    # Controlla se jq è disponibile
+    if ! command_exists jq; then
+        echo "⚠️  jq non installato. Installo jq per gestire modules.json..."
+        if command_exists apt-get; then
+            sudo apt-get update && sudo apt-get install -y jq >/dev/null 2>&1 || {
+                echo "❌ Impossibile installare jq. Gestione moduli saltata."
+                return 1
+            }
+        elif command_exists yum; then
+            sudo yum install -y jq >/dev/null 2>&1
+        elif command_exists pacman; then
+            sudo pacman -S --noconfirm jq >/dev/null 2>&1
+        elif command_exists brew; then
+            brew install jq >/dev/null 2>&1
+        else
+            echo "❌ Non riesco a installare jq automaticamente. Installalo manualmente."
+            return 1
+        fi
+    fi
+
+    # Leggi configurazioni
+    local auto_update=$(jq -r '.config.auto_update // true' "$modules_file")
+    local skip_existing=$(jq -r '.config.skip_existing // false' "$modules_file")
+    local clone_depth=$(jq -r '.config.clone_depth // 1' "$modules_file")
+
+    # Processa ogni modulo
+    local modules_count=$(jq '.modules | length' "$modules_file")
+    log_verbose "Trovati $modules_count moduli configurati"
+
+    for i in $(seq 0 $((modules_count - 1))); do
+        local module_name=$(jq -r ".modules[$i].name" "$modules_file")
+        local git_url=$(jq -r ".modules[$i].git_url" "$modules_file")
+        local branch=$(jq -r ".modules[$i].branch // \"main\"" "$modules_file")
+        local enabled=$(jq -r ".modules[$i].enabled // true" "$modules_file")
+        local description=$(jq -r ".modules[$i].description // \"\"" "$modules_file")
+
+        if [ "$enabled" != "true" ]; then
+            log_verbose "Modulo $module_name disabilitato, saltato"
+            continue
+        fi
+
+        local module_path="modules/$module_name"
+
+        if [ -d "$module_path" ]; then
+            if [ "$skip_existing" = "true" ]; then
+                log_verbose "Modulo $module_name già presente, saltato"
+                continue
+            fi
+
+            if [ "$auto_update" = "true" ]; then
+                log_verbose "Aggiornamento modulo $module_name..."
+                cd "$module_path"
+                if git pull origin "$branch" >/dev/null 2>&1; then
+                    log_verbose "✅ Modulo $module_name aggiornato"
+                else
+                    log_verbose "⚠️ Errore aggiornamento modulo $module_name"
+                fi
+                cd - >/dev/null
+            else
+                log_verbose "Modulo $module_name presente (aggiornamenti disabilitati)"
+            fi
+        else
+            log_verbose "Clonazione modulo $module_name da $git_url..."
+            if git clone --depth "$clone_depth" -b "$branch" "$git_url" "$module_path" >/dev/null 2>&1; then
+                log_verbose "✅ Modulo $module_name clonato con successo"
+                [ -n "$description" ] && log_verbose "   Descrizione: $description"
+            else
+                echo "❌ Errore clonazione modulo $module_name da $git_url"
+                echo "   Verifica che il repository sia accessibile e che la chiave SSH sia configurata"
+            fi
+        fi
+    done
+
+    log_verbose "Gestione moduli completata"
 }
 
 # --- Check/install pyenv ---
@@ -260,6 +356,13 @@ if [ ! -d "$ODOO_DIR" ]; then
     git clone git@github.com:odoo/odoo -b $ODOO_VERSION --depth=1 $ODOO_DIR
 else
     echo "📁 Cartella Odoo già esistente"
+fi
+
+# --- Manage custom modules ---
+if [ "$SKIP_MODULES" = false ]; then
+    manage_modules
+else
+    log_verbose "Saltando gestione moduli (--skip-modules)"
 fi
 
 # --- Load environment variables ---

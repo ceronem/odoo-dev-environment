@@ -147,6 +147,9 @@ addons/
 modules/*
 !modules/.gitkeep
 
+# Module configuration (can be personalized)
+modules.json
+
 # Odoo configuration
 odoo.conf
 openerp.conf

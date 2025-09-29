@@ -50,6 +50,7 @@ Lo script `start.sh` automatizza completamente la configurazione dell'ambiente d
 |---------|-------------|
 | `-v, --verbose` | Output dettagliato di tutte le operazioni |
 | `--skip-deps` | Salta l'installazione delle dipendenze |
+| `--skip-modules` | Salta la gestione moduli (clone/update) |
 | `--demo` | Avvia Odoo con dati demo |
 | `--fresh-db` | Inizializza un database completamente nuovo |
 | `--force` | Salta tutte le conferme interattive |
@@ -110,7 +111,7 @@ Lo script `start.sh` automatizza completamente la configurazione dell'ambiente d
 - Clone automatico del repository Odoo (versione 17.0)
 - Configurazione parametri database e porta HTTP
 - Supporto per file di configurazione `odoo.conf`
-- Gestione addons personalizzati in `../modules`
+- Gestione moduli personalizzati automatica via Git
 
 #### 6. **Avvio Intelligente**
 - Termina processi Odoo esistenti
@@ -148,20 +149,48 @@ odoo/
 ├── start.sh              # Script di avvio principale
 ├── docker-compose.yml    # Configurazione PostgreSQL e pgAdmin
 ├── pyproject.toml        # Dipendenze Python e configurazione
+├── modules.json.example  # Template configurazione moduli
+├── modules.json          # Configurazione moduli (locale, opzionale)
 ├── .env                  # Variabili d'ambiente (opzionale)
 ├── odoo.conf            # Configurazione Odoo (opzionale)
 ├── .venv/               # Virtual environment (auto-generato)
 ├── odoo/                # Repository Odoo (auto-clonato)
-└── modules/             # Directory per moduli personalizzati
+└── modules/             # Moduli personalizzati (auto-clonati)
 ```
 
 ## Sviluppo
 
-### Aggiunta di Moduli Personalizzati
+### Gestione Moduli Personalizzati
 
-1. Crea i tuoi moduli nella directory `modules/`
-2. Riavvia Odoo per caricare i nuovi moduli
-3. I moduli saranno automaticamente riconosciuti da Odoo
+**Setup automatico:**
+1. Copia `modules.json.example` in `modules.json`
+2. Configura i tuoi repository Git nel file
+3. Avvia con `./start.sh` - i moduli vengono clonati automaticamente
+
+**Formato modules.json:**
+```json
+{
+  "modules": [
+    {
+      "name": "my_module",
+      "git_url": "git@github.com:username/my_module.git",
+      "branch": "main",
+      "enabled": true,
+      "description": "Descrizione del modulo"
+    }
+  ],
+  "config": {
+    "auto_update": true,
+    "skip_existing": false,
+    "clone_depth": 1
+  }
+}
+```
+
+**Opzioni configurazione:**
+- `auto_update`: Aggiorna moduli esistenti con git pull
+- `skip_existing`: Salta moduli già presenti
+- `clone_depth`: Profondità del clone Git (default: 1)
 
 ### Debugging
 
