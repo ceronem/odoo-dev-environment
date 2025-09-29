@@ -19,8 +19,7 @@ python = "^3.12"
 
 # dipendenze di sviluppo
 [tool.poetry.group.dev.dependencies]
-odoo-stubs = "^16.0"
-ruff = "^0.0.400"       # linter moderno
+ruff = "^0.8.0"       # linter moderno
 
 [tool.ruff]
 # Attiva tutte le regole principali
