@@ -4,10 +4,14 @@
     "python.analysis.inlayHints.callArgumentNames": "all",
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
-    "python.defaultInterpreter": "./.venv/bin/python",
     "[python]": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+        }
     },
-    "python.linting.enabled": false
+    "ruff.fixAll": true,
+    "ruff.organizeImports": true
 }

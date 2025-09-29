@@ -23,20 +23,24 @@ ruff = "^0.8.0"       # linter moderno
 odoo-stubs = "^17.0"  # type stubs per Odoo
 
 [tool.ruff]
-# Attiva tutte le regole principali
-select = ["E", "F", "I", "B", "C", "Q"]  # E,F=Pyflakes, I=isort, B=Black, C=complexity, Q=Ruff specific
-
-# Ignora eventuali falsi positivi se necessario
-ignore = []
-
-# Line length (Black di default)
 line-length = 88
+exclude = [
+    "odoo/**",
+    ".venv/**",
+]
 
-# Ordina automaticamente gli import (isort)
-[tool.ruff.isort]
-profile = "black"
+[tool.ruff.lint]
+select = ["E", "F", "I"]  # E,F=Pyflakes, I=isort
+ignore = [
+    "F401",  # Imported but unused (comune in Odoo)
+    "F811",  # Redefined while unused (comune in Odoo)
+]
 
-# Stile di formattazione compatibile Black
-[tool.ruff.black]
-target-version = "py312"
-line-length = 88
+[tool.ruff.lint.isort]
+known-first-party = ["odoo"]
+known-third-party = ["psycopg2", "werkzeug", "lxml"]
+
+# Formatting
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
