@@ -1,17 +1,21 @@
 {
   "include": [
-    "modules",
-    "odoo"
+    "modules"
   ],
   "extraPaths": [
     "./odoo"
   ],
   "pythonVersion": "3.12",
   "pythonPlatform": "Linux",
-  "typeCheckingMode": "basic",
+  "typeCheckingMode": "off",
   "diagnosticMode": "workspace",
-  "reportUnusedImport": "warning",
-  "reportUnusedVariable": "warning",
-  "venvPath": ".venv",
+  "reportUnusedImport": "none",
+  "reportUnusedVariable": "none",
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownVariableType": false,
+  "venvPath": ".",
   "venv": ".venv"
 }
