@@ -10,6 +10,7 @@ FORCE=false
 NO_BROWSER=false
 PG_TIMEOUT=60
 DEBUG_MODE=false
+DEBUG_WAIT=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -45,6 +46,11 @@ while [[ $# -gt 0 ]]; do
             DEBUG_MODE=true
             shift
             ;;
+        --debug-wait)
+            DEBUG_MODE=true
+            DEBUG_WAIT=true
+            shift
+            ;;
         -h|--help)
             echo "Usage: $0 [OPTIONS]"
             echo "Options:"
@@ -56,6 +62,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --no-browser     Don't open browser automatically"
             echo "  --pg-timeout N   PostgreSQL timeout in seconds (default: 60)"
             echo "  --debug          Enable debug mode (port 5678)"
+            echo "  --debug-wait     Enable debug mode and wait for client"
             echo "  -h, --help       Show this help"
             exit 0
             ;;
@@ -347,10 +354,18 @@ if [ "$DEMO_MODE" = true ]; then
 fi
 
 if [ "$DEBUG_MODE" = true ]; then
-    log "Modalità debug abilitata (porta 5678)"
     # Installa debugpy se non presente
     pip show debugpy >/dev/null 2>&1 || pip install debugpy --quiet
-    ODOO_CMD=(python -m debugpy --listen 0.0.0.0:5678 --wait-for-client "${ODOO_CMD[@]:1}")
+
+    if [ "$DEBUG_WAIT" = true ]; then
+        log "Modalità debug con attesa client abilitata (porta 5678)"
+        echo "⏳ Odoo attenderà la connessione del debugger prima di avviarsi..."
+        ODOO_CMD=(python -m debugpy --listen 0.0.0.0:5678 --wait-for-client "${ODOO_CMD[@]:1}")
+    else
+        log "Modalità debug abilitata (porta 5678)"
+        echo "ℹ️  Puoi collegare il debugger in qualsiasi momento"
+        ODOO_CMD=(python -m debugpy --listen 0.0.0.0:5678 "${ODOO_CMD[@]:1}")
+    fi
 fi
 
 if [ "$FRESH_DB" = true ]; then

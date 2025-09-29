@@ -55,6 +55,8 @@ Lo script `start.sh` automatizza completamente la configurazione dell'ambiente d
 | `--force` | Salta tutte le conferme interattive |
 | `--no-browser` | Non apre automaticamente il browser |
 | `--pg-timeout N` | Timeout per PostgreSQL in secondi (default: 60) |
+| `--debug` | Abilita modalità debug (porta 5678) |
+| `--debug-wait` | Abilita debug e attende connessione client |
 | `-h, --help` | Mostra l'aiuto |
 
 ### Esempi di Utilizzo
@@ -71,6 +73,12 @@ Lo script `start.sh` automatizza completamente la configurazione dell'ambiente d
 
 # Avvio rapido senza dipendenze (se già installate)
 ./start.sh --skip-deps --no-browser
+
+# Debug - Odoo parte subito
+./start.sh --debug
+
+# Debug - Odoo aspetta il debugger
+./start.sh --debug-wait
 ```
 
 ### Funzionalità dello Script
