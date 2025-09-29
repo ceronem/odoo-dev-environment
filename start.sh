@@ -9,6 +9,7 @@ FRESH_DB=false
 FORCE=false
 NO_BROWSER=false
 PG_TIMEOUT=60
+DEBUG_MODE=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -40,6 +41,10 @@ while [[ $# -gt 0 ]]; do
             PG_TIMEOUT="$2"
             shift 2
             ;;
+        --debug)
+            DEBUG_MODE=true
+            shift
+            ;;
         -h|--help)
             echo "Usage: $0 [OPTIONS]"
             echo "Options:"
@@ -50,6 +55,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --force          Skip confirmation prompts"
             echo "  --no-browser     Don't open browser automatically"
             echo "  --pg-timeout N   PostgreSQL timeout in seconds (default: 60)"
+            echo "  --debug          Enable debug mode (port 5678)"
             echo "  -h, --help       Show this help"
             exit 0
             ;;
@@ -338,6 +344,13 @@ fi
 if [ "$DEMO_MODE" = true ]; then
     log "Modalità demo abilitata"
     ODOO_CMD+=(--with-demo)
+fi
+
+if [ "$DEBUG_MODE" = true ]; then
+    log "Modalità debug abilitata (porta 5678)"
+    # Installa debugpy se non presente
+    pip show debugpy >/dev/null 2>&1 || pip install debugpy --quiet
+    ODOO_CMD=(python -m debugpy --listen 0.0.0.0:5678 --wait-for-client "${ODOO_CMD[@]:1}")
 fi
 
 if [ "$FRESH_DB" = true ]; then

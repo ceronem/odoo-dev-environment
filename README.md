@@ -157,9 +157,20 @@ odoo/
 
 ### Debugging
 
+**Setup VS Code Debug:**
+1. Copia `.vscode/launch.json.example` in `.vscode/launch.json`
+2. Personalizza le configurazioni se necessario
+
+**Avvio con debug:**
+```bash
+./start.sh --debug
+```
+
+**Altre opzioni:**
 - Usa `--verbose` per output dettagliato
 - I log di Odoo sono visibili direttamente nel terminale
 - pgAdmin è disponibile per gestire il database
+- Breakpoint con `import pdb; pdb.set_trace()` nel codice Python
 
 ### Reset dell'Ambiente
 
