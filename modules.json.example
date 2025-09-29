@@ -2,24 +2,10 @@
   "modules": [
     {
       "name": "my_hostel",
-      "git_url": "git@github.com:username/my_hostel.git",
+      "git_url": "git@github.com:ceronem/my_hostel_test.git",
       "branch": "main",
       "enabled": true,
       "description": "Hostel Management Module"
-    },
-    {
-      "name": "my_accounting_extension",
-      "git_url": "https://github.com/username/my_accounting_extension.git",
-      "branch": "develop",
-      "enabled": true,
-      "description": "Custom accounting extensions"
-    },
-    {
-      "name": "disabled_module",
-      "git_url": "git@github.com:username/disabled_module.git",
-      "branch": "main",
-      "enabled": false,
-      "description": "This module is disabled and won't be cloned"
     }
   ],
   "config": {
