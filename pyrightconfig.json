@@ -1,0 +1,17 @@
+{
+  "include": [
+    "modules",
+    "odoo"
+  ],
+  "extraPaths": [
+    "./odoo"
+  ],
+  "pythonVersion": "3.12",
+  "pythonPlatform": "Linux",
+  "typeCheckingMode": "basic",
+  "diagnosticMode": "workspace",
+  "reportUnusedImport": "warning",
+  "reportUnusedVariable": "warning",
+  "venvPath": ".venv",
+  "venv": ".venv"
+}

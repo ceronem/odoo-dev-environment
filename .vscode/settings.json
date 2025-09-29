@@ -1,0 +1,11 @@
+{
+    "python.analysis.diagnosticMode": "workspace",
+    "python.languageServer": "Pylance",
+    "python.analysis.inlayHints.callArgumentNames": "all",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    }
+}

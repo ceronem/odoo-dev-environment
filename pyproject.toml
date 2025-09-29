@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+name = "odoo-project"
+version = "0.1.0"
+description = "Modulo Odoo personalizzato"
+authors = ["Mauro Cerone <mauro.cerone@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "odoo_project" }
+]
+
+# versione di Python richiesta
+[tool.poetry.dependencies]
+python = "^3.12"
+
+# dipendenze di sviluppo
+[tool.poetry.group.dev.dependencies]
+odoo-stubs = "^16.0"
+ruff = "^0.0.400"       # linter moderno
+
+[tool.ruff]
+# Attiva tutte le regole principali
+select = ["E", "F", "I", "B", "C", "Q"]  # E,F=Pyflakes, I=isort, B=Black, C=complexity, Q=Ruff specific
+
+# Ignora eventuali falsi positivi se necessario
+ignore = []
+
+# Line length (Black di default)
+line-length = 88
+
+# Ordina automaticamente gli import (isort)
+[tool.ruff.isort]
+profile = "black"
+
+# Stile di formattazione compatibile Black
+[tool.ruff.black]
+target-version = "py312"
+line-length = 88
