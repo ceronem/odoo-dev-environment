@@ -1,129 +1,129 @@
-# Ambiente di Sviluppo Odoo
+# Odoo Development Environment
 
-Questo progetto fornisce un ambiente di sviluppo completo e automatizzato per Odoo, con configurazione automatica di Python, PostgreSQL e tutte le dipendenze necessarie.
+This project provides a complete and automated development environment for Odoo, with automatic configuration of Python, PostgreSQL, and all necessary dependencies.
 
-## Caratteristiche
+## Features
 
-- ✅ **Setup automatico completo**: Python 3.12, pyenv, PostgreSQL, pgAdmin
-- ✅ **Zero configurazione manuale**: tutto viene configurato automaticamente
-- ✅ **Docker Compose integrato**: PostgreSQL e pgAdmin containerizzati
-- ✅ **Gestione dipendenze moderna**: Poetry per le dipendenze di sviluppo
-- ✅ **Multiple opzioni di avvio**: demo mode, fresh database, verbose output
-- ✅ **Cross-platform**: supporta Linux, macOS, WSL
+- ✅ **Complete automatic setup**: Python 3.12, pyenv, PostgreSQL, pgAdmin
+- ✅ **Zero manual configuration**: everything is configured automatically
+- ✅ **Integrated Docker Compose**: containerized PostgreSQL and pgAdmin
+- ✅ **Modern dependency management**: Poetry for development dependencies
+- ✅ **Multiple startup options**: demo mode, fresh database, verbose output
+- ✅ **Cross-platform**: supports Linux, macOS, WSL
 
-## Requisiti
+## Requirements
 
-- **Docker** e **Docker Compose**
+- **Docker** and **Docker Compose**
 - **Git**
-- **Bash** (per lo script di avvio)
+- **Bash** (for the startup script)
 
-Tutto il resto (Python, pyenv, dipendenze) viene installato automaticamente.
+Everything else (Python, pyenv, dependencies) is installed automatically.
 
 ## Quick Start
 
-1. **Clone del repository**:
+1. **Clone the repository**:
    ```bash
    git clone <repository-url>
    cd odoo
    ```
 
-2. **Avvio dell'ambiente**:
+2. **Start the environment**:
    ```bash
    ./start.sh
    ```
 
-3. **Accesso all'applicazione**:
+3. **Access the application**:
    - Odoo: http://localhost:8069
    - pgAdmin: http://localhost:8081
 
-## Script di Avvio (start.sh)
+## Startup Script (start.sh)
 
-Lo script `start.sh` automatizza completamente la configurazione dell'ambiente di sviluppo.
+The `start.sh` script completely automates the development environment configuration.
 
-### Opzioni Disponibili
+### Available Options
 
 ```bash
-./start.sh [OPZIONI]
+./start.sh [OPTIONS]
 ```
 
-| Opzione | Descrizione |
-|---------|-------------|
-| `-v, --verbose` | Output dettagliato di tutte le operazioni |
-| `--skip-deps` | Salta l'installazione delle dipendenze |
-| `--skip-modules` | Salta la gestione moduli (clone/update) |
-| `--demo` | Avvia Odoo con dati demo |
-| `--fresh-db` | Inizializza un database completamente nuovo |
-| `--force` | Salta tutte le conferme interattive |
-| `--no-browser` | Non apre automaticamente il browser |
-| `--pg-timeout N` | Timeout per PostgreSQL in secondi (default: 60) |
-| `--debug` | Abilita modalità debug (porta 5678) |
-| `--debug-wait` | Abilita debug e attende connessione client |
-| `-h, --help` | Mostra l'aiuto |
+| Option | Description |
+|--------|-------------|
+| `-v, --verbose` | Detailed output of all operations |
+| `--skip-deps` | Skip dependency installation |
+| `--skip-modules` | Skip module management (clone/update) |
+| `--demo` | Start Odoo with demo data |
+| `--fresh-db` | Initialize a completely fresh database |
+| `--force` | Skip all interactive confirmations |
+| `--no-browser` | Don't automatically open the browser |
+| `--pg-timeout N` | PostgreSQL timeout in seconds (default: 60) |
+| `--debug` | Enable debug mode (port 5678) |
+| `--debug-wait` | Enable debug and wait for client connection |
+| `-h, --help` | Show help |
 
-### Esempi di Utilizzo
+### Usage Examples
 
 ```bash
-# Avvio standard
+# Standard startup
 ./start.sh
 
-# Avvio con dati demo e output verbose
+# Startup with demo data and verbose output
 ./start.sh --demo --verbose
 
-# Reset completo del database
+# Complete database reset
 ./start.sh --fresh-db
 
-# Avvio rapido senza dipendenze (se già installate)
+# Quick startup without dependencies (if already installed)
 ./start.sh --skip-deps --no-browser
 
-# Debug - Odoo parte subito
+# Debug - Odoo starts immediately
 ./start.sh --debug
 
-# Debug - Odoo aspetta il debugger
+# Debug - Odoo waits for debugger
 ./start.sh --debug-wait
 ```
 
-### Funzionalità dello Script
+### Script Features
 
-#### 1. **Gestione Python e pyenv**
-- Installa automaticamente pyenv se non presente
-- Configura Python 3.12.2 come versione del progetto
-- Aggiunge pyenv al `.bashrc` per caricamento automatico
-- Verifica l'integrità dell'installazione Python
+#### 1. **Python and pyenv Management**
+- Automatically installs pyenv if not present
+- Configures Python 3.12.2 as the project version
+- Adds pyenv to `.bashrc` for automatic loading
+- Verifies Python installation integrity
 
-#### 2. **Controllo Dipendenze di Sistema**
-- Verifica presenza di `wkhtmltopdf` (necessario per i PDF di Odoo)
-- Controlla Docker Compose
-- Valida la configurazione dell'ambiente
+#### 2. **System Dependencies Check**
+- Checks for `wkhtmltopdf` (required for Odoo PDFs)
+- Validates Docker Compose
+- Validates environment configuration
 
-#### 3. **Gestione Database**
-- Avvia PostgreSQL tramite Docker Compose
-- Attende che il database sia pronto con timeout configurabile
-- Supporta reset completo del database con `--fresh-db`
-- Gestisce pgAdmin per amministrazione database
+#### 3. **Database Management**
+- Starts PostgreSQL via Docker Compose
+- Waits for database to be ready with configurable timeout
+- Supports complete database reset with `--fresh-db`
+- Manages pgAdmin for database administration
 
-#### 4. **Setup Ambiente Python**
-- Crea e attiva virtual environment automaticamente
-- Installa dipendenze runtime di Odoo
-- Configura Poetry per dipendenze di sviluppo
-- Cache intelligente per evitare reinstallazioni
+#### 4. **Python Environment Setup**
+- Creates and activates virtual environment automatically
+- Installs Odoo runtime dependencies
+- Configures Poetry for development dependencies
+- Intelligent caching to avoid reinstallations
 
-#### 5. **Configurazione Odoo**
-- Clone automatico del repository Odoo (versione 17.0)
-- Configurazione parametri database e porta HTTP
-- Supporto per file di configurazione `odoo.conf`
-- Gestione moduli personalizzati automatica via Git
+#### 5. **Odoo Configuration**
+- Automatic cloning of Odoo repository (version 17.0)
+- Database parameters and HTTP port configuration
+- Support for `odoo.conf` configuration file
+- Automatic custom module management via Git
 
-#### 6. **Avvio Intelligente**
-- Termina processi Odoo esistenti
-- Apertura automatica del browser
-- Modalità verbose per debugging
-- Gestione errori con messaggi informativi
+#### 6. **Smart Startup**
+- Terminates existing Odoo processes
+- Automatic browser opening
+- Verbose mode for debugging
+- Error handling with informative messages
 
-## Configurazione
+## Configuration
 
-### Variabili d'Ambiente
+### Environment Variables
 
-Crea un file `.env` nella root del progetto per personalizzare la configurazione:
+Create a `.env` file in the project root to customize the configuration:
 
 ```env
 # Database
@@ -142,32 +142,32 @@ PGADMIN_DEFAULT_EMAIL=admin@example.com
 PGADMIN_DEFAULT_PASSWORD=admin
 ```
 
-### Struttura del Progetto
+### Project Structure
 
 ```
 odoo/
-├── start.sh              # Script di avvio principale
-├── docker-compose.yml    # Configurazione PostgreSQL e pgAdmin
-├── pyproject.toml        # Dipendenze Python e configurazione
-├── modules.json.example  # Template configurazione moduli
-├── modules.json          # Configurazione moduli (locale, opzionale)
-├── .env                  # Variabili d'ambiente (opzionale)
-├── odoo.conf            # Configurazione Odoo (opzionale)
-├── .venv/               # Virtual environment (auto-generato)
-├── odoo/                # Repository Odoo (auto-clonato)
-└── modules/             # Moduli personalizzati (auto-clonati)
+├── start.sh              # Main startup script
+├── docker-compose.yml    # PostgreSQL and pgAdmin configuration
+├── pyproject.toml        # Python dependencies and configuration
+├── modules.json.example  # Module configuration template
+├── modules.json          # Module configuration (local, optional)
+├── .env                  # Environment variables (optional)
+├── odoo.conf            # Odoo configuration (optional)
+├── .venv/               # Virtual environment (auto-generated)
+├── odoo/                # Odoo repository (auto-cloned)
+└── modules/             # Custom modules (auto-cloned)
 ```
 
-## Sviluppo
+## Development
 
-### Gestione Moduli Personalizzati
+### Custom Module Management
 
-**Setup automatico:**
-1. Copia `modules.json.example` in `modules.json`
-2. Configura i tuoi repository Git nel file
-3. Avvia con `./start.sh` - i moduli vengono clonati automaticamente
+**Automatic setup:**
+1. Copy `modules.json.example` to `modules.json`
+2. Configure your Git repositories in the file
+3. Start with `./start.sh` - modules are cloned automatically
 
-**Formato modules.json:**
+**modules.json format:**
 ```json
 {
   "modules": [
@@ -176,7 +176,7 @@ odoo/
       "git_url": "git@github.com:username/my_module.git",
       "branch": "main",
       "enabled": true,
-      "description": "Descrizione del modulo"
+      "description": "Module description"
     }
   ],
   "config": {
@@ -187,64 +187,64 @@ odoo/
 }
 ```
 
-**Opzioni configurazione:**
-- `auto_update`: Aggiorna moduli esistenti con git pull
-- `skip_existing`: Salta moduli già presenti
-- `clone_depth`: Profondità del clone Git (default: 1)
+**Configuration options:**
+- `auto_update`: Update existing modules with git pull
+- `skip_existing`: Skip modules already present
+- `clone_depth`: Git clone depth (default: 1)
 
 ### Debugging
 
-**Setup VS Code Debug:**
-1. Copia `.vscode/launch.json.example` in `.vscode/launch.json`
-2. Personalizza le configurazioni se necessario
+**VS Code Debug Setup:**
+1. Copy `.vscode/launch.json.example` to `.vscode/launch.json`
+2. Customize configurations if necessary
 
-**Avvio con debug:**
+**Start with debug:**
 ```bash
 ./start.sh --debug
 ```
 
-**Altre opzioni:**
-- Usa `--verbose` per output dettagliato
-- I log di Odoo sono visibili direttamente nel terminale
-- pgAdmin è disponibile per gestire il database
-- Breakpoint con `import pdb; pdb.set_trace()` nel codice Python
+**Other options:**
+- Use `--verbose` for detailed output
+- Odoo logs are visible directly in the terminal
+- pgAdmin is available for database management
+- Breakpoints with `import pdb; pdb.set_trace()` in Python code
 
-### Reset dell'Ambiente
+### Environment Reset
 
 ```bash
-# Reset completo del database
+# Complete database reset
 ./start.sh --fresh-db
 
-# Reinstallazione completa delle dipendenze
+# Complete dependency reinstallation
 rm -rf .venv .requirements_installed
 ./start.sh
 ```
 
 ## Troubleshooting
 
-### Problemi Comuni
+### Common Issues
 
-**PostgreSQL non si avvia**:
+**PostgreSQL won't start**:
 ```bash
 docker-compose down
 docker-compose up -d
 ```
 
-**Errori di dipendenze Python**:
+**Python dependency errors**:
 ```bash
 rm -rf .venv .requirements_installed
 ./start.sh
 ```
 
-**Porta già in uso**:
-- Cambia `ODOO_HTTP_PORT` nel file `.env`
-- Oppure termina il processo esistente: `pkill -f odoo-bin`
+**Port already in use**:
+- Change `ODOO_HTTP_PORT` in the `.env` file
+- Or terminate the existing process: `pkill -f odoo-bin`
 
-**Timeout PostgreSQL**:
+**PostgreSQL timeout**:
 ```bash
 ./start.sh --pg-timeout 120
 ```
 
-## Licenza
+## License
 
 MIT
