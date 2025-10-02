@@ -431,6 +431,9 @@ else
 fi
 
 # --- Build Odoo command using array to avoid quoting issues ---
+# Get custom modules from ./modules directory
+CUSTOM_MODULES=$(find ./modules -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | tr '\n' ',' | sed 's/,$//')
+
 ODOO_CMD=(
     python odoo-bin
     -d "$DB_NAME"
@@ -439,8 +442,9 @@ ODOO_CMD=(
     --db_host "$DB_HOST"
     --db_port "$DB_PORT"
     --http-port "$ODOO_HTTP_PORT"
-    -u all
+    -u "$CUSTOM_MODULES"
     --addons-path ../modules
+    --dev=reload,qweb,xml,assets
 )
 
 # Add config file if it exists
@@ -500,7 +504,7 @@ if [ "$FRESH_DB" = true ]; then
     fi
 
     log "Inizializzazione database fresh"
-    # Replace -u all with --init=all for fresh database
+    # Replace -u with --init for fresh database
     for i in "${!ODOO_CMD[@]}"; do
         if [[ "${ODOO_CMD[$i]}" == "-u" ]]; then
             ODOO_CMD[$i]="--init"
