@@ -1,0 +1,35 @@
+{
+  "modules": [
+    {
+      "name": "my_hostel",
+      "git_url": "git@github.com:ceronem/my_hostel_test.git",
+      "branch": "main",
+      "enabled": true,
+      "description": "Hostel Management Module"
+    }
+  ],
+  "odoo_standard_modules": [
+    "sales",
+    "purchase",
+    "crm",
+    "inventory",
+    "contacts"
+  ],
+  "odoo_addons": {
+    "enterprise": {
+      "enabled": false,
+      "git_url": "git@github.com:odoo/enterprise.git",
+      "branch": "18.0"
+    },
+    "extra_repos": [
+      {
+        "name": "web_responsive",
+        "git_url": "https://github.com/OCA/web.git",
+        "branch": "18.0",
+        "subdirs": ["web_responsive"],
+        "enabled": true,
+        "description": "OCA Web Responsive"
+      }
+    ]
+  }
+}

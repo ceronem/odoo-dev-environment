@@ -1,0 +1,23 @@
+FROM odoo:18.0
+
+USER root
+
+# Copia moduli custom
+COPY ./addons /mnt/extra-addons
+
+# Copia lista moduli da installare e entrypoint personalizzato
+COPY modules_to_install.txt* /tmp/
+COPY docker-entrypoint.sh* /usr/local/bin/custom-entrypoint.sh
+RUN if [ -f /usr/local/bin/custom-entrypoint.sh ]; then \
+        chmod +x /usr/local/bin/custom-entrypoint.sh; \
+    fi
+
+# Torna all'utente odoo
+USER odoo
+
+# Esponi porta
+EXPOSE 8069 8071 8072
+
+# Usa entrypoint personalizzato se presente, altrimenti quello di default
+ENTRYPOINT ["/usr/local/bin/custom-entrypoint.sh"]
+CMD ["odoo"]

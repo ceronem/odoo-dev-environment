@@ -188,3 +188,6 @@ Desktop.ini
 .requirements_installed
 odoo
 schema.dbml
+build-modules.json
+
+odoo-dev-sales.tar

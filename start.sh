@@ -92,6 +92,14 @@ log_verbose() {
 
 log "Starting Odoo development environment..."
 
+# --- Load environment variables first ---
+if [ -f ".env" ]; then
+    log_verbose "Carico variabili d'ambiente da .env..."
+    set -o allexport
+    source .env
+    set +o allexport
+fi
+
 # --- Configurazione ---
 PYTHON_VERSION=3.12.2
 VENV_DIR=".venv"
@@ -365,14 +373,6 @@ else
     log_verbose "Saltando gestione moduli (--skip-modules)"
 fi
 
-# --- Load environment variables ---
-if [ -f ".env" ]; then
-    echo "🔧 Carico variabili d'ambiente..."
-    set -o allexport
-    source .env
-    set +o allexport
-fi
-
 # --- Create virtual environment ---
 if [ ! -d "$VENV_DIR" ]; then
     echo "🆕 Creo virtual environment..."
@@ -416,15 +416,16 @@ else
     log_verbose "Poetry già installato (versione: $POETRY_VERSION)"
 fi
 
-# --- Install development dependencies via Poetry ---
+# --- Install dependencies via Poetry ---
 if [ "$SKIP_DEPS" = false ]; then
     if command_exists poetry && [ -f "pyproject.toml" ]; then
-        log "Installo dipendenze dev via Poetry..."
-        if ! poetry install --with dev --no-interaction --no-ansi --quiet 2>/dev/null; then
-            log_verbose "⚠️ Poetry install fallito, continuo senza dipendenze dev"
+        log "Installo dipendenze via Poetry..."
+        if ! poetry install --no-interaction --no-ansi --quiet; then
+            log_verbose "⚠️ Poetry install fallito, riprovo con output..."
+            poetry install --no-interaction
         fi
     else
-        log_verbose "Poetry o pyproject.toml non disponibile, saltando dipendenze dev"
+        log_verbose "Poetry o pyproject.toml non disponibile, saltando dipendenze"
     fi
 else
     log_verbose "Saltando installazione dipendenze (--skip-deps)"
@@ -443,7 +444,7 @@ ODOO_CMD=(
     --db_port "$DB_PORT"
     --http-port "$ODOO_HTTP_PORT"
     -u "$CUSTOM_MODULES"
-    --addons-path ../modules
+    --addons-path ./addons,../modules
     --dev=reload,qweb,xml,assets
 )
 

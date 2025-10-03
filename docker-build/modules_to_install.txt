@@ -1,0 +1,1 @@
+sales,purchase,crm,inventory,contacts
