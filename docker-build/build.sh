@@ -2,7 +2,7 @@
 set -e
 
 IMAGE_NAME="${1:-odoo-custom}"
-IMAGE_TAG="${2:-v0.0.2}"
+IMAGE_TAG="${2:-v0.0.1}"
 REGISTRY="registry.vultur-code.vpn:30013"
 
 if [ -n "$REGISTRY" ]; then

@@ -437,7 +437,7 @@ CUSTOM_MODULES=$(find ./modules -mindepth 1 -maxdepth 1 -type d -exec basename {
 
 ODOO_CMD=(
     python odoo-bin
-    -d "$DB_NAME"
+    # -d "$DB_NAME"
     -r "$DB_USER"
     -w "$DB_PASSWORD"
     --db_host "$DB_HOST"

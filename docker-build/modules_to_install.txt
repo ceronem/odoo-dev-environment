@@ -1,1 +1,1 @@
-sales,purchase,crm,inventory,contacts
+base,sale_management,purchase,crm,contacts,stock
